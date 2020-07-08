@@ -2,7 +2,7 @@ const request = require("request");
 const readlineSync = require("readline-sync");
 
 console.log("What postcode are you at?");
-const postcode = readlineSync.prompt();
+const postcode = "NW5 1TL";
 
 request("https://api.postcodes.io/postcodes/" + postcode, function (
   error,
@@ -25,23 +25,23 @@ request("https://api.postcodes.io/postcodes/" + postcode, function (
 
     const nearestTwoBusStops = returnedtflBody.stopPoints.slice(0, 2);
 
-    console.log(nearestTwoBusStops);
+    for (let i = 0; i < 2; i++) {
+      let individualBusStopIds = nearestTwoBusStops[i].naptanId;
+    }
+    const url =
+      "https://api.tfl.gov.uk/StopPoint/" + individualBusStopIds + "/Arrivals";
+
+    request(url, function (error, response, body) {
+      const returnedBody = JSON.parse(body);
+
+      displayFirstFive(returnedBody);
+    });
+
+    console.log(individualBusStopIds);
   });
+
+  function displayFirstFive(returnedBody) {
+    const firstFive = returnedBody.slice(0, 5);
+    console.log(firstFive);
+  }
 });
-
-console.log("Bus Stop Code?");
-const busStopCode = readlineSync.prompt();
-
-const url = "https://api.tfl.gov.uk/StopPoint/" + busStopCode + "/Arrivals";
-request(url, function (error, response, body) {
-  const returnedBody = JSON.parse(body);
-
-  displayFirstFive(returnedBody);
-});
-
-function displayFirstFive(returnedBody) {
-  const firstFive = returnedBody.slice(0, 5);
-  console.log(firstFive);
-}
-
-//2 BUS STOPS IDS
