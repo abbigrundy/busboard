@@ -1,7 +1,5 @@
 const request = require("request");
-const readlineSync = require("readline-sync");
 
-console.log("What postcode are you at?");
 const postcode = "NW5 1TL";
 
 request("https://api.postcodes.io/postcodes/" + postcode, function (
@@ -39,15 +37,10 @@ request("https://api.postcodes.io/postcodes/" + postcode, function (
         displayFirstFive(returnedBody);
       });
     }
-
-    //console.log(individualBusStopIds);
   });
 
   function displayFirstFive(returnedBody) {
     const firstFive = returnedBody.slice(0, 5);
-
-    // for (let i = 0; i < firstFive.length; i++)
-    //   console.log(`${firstFive[i].lineName} ${firstFive[i].expectedArrival}`);
 
     firstFive.forEach(function (busArrival) {
       console.log(`${busArrival.lineName} ${busArrival.expectedArrival}`);
