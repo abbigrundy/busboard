@@ -27,21 +27,30 @@ request("https://api.postcodes.io/postcodes/" + postcode, function (
 
     for (let i = 0; i < 2; i++) {
       let individualBusStopIds = nearestTwoBusStops[i].naptanId;
+
+      const url =
+        "https://api.tfl.gov.uk/StopPoint/" +
+        individualBusStopIds +
+        "/Arrivals";
+
+      request(url, function (error, response, body) {
+        const returnedBody = JSON.parse(body);
+        console.log(`The bus stop number ${i}`);
+        displayFirstFive(returnedBody);
+      });
     }
-    const url =
-      "https://api.tfl.gov.uk/StopPoint/" + individualBusStopIds + "/Arrivals";
 
-    request(url, function (error, response, body) {
-      const returnedBody = JSON.parse(body);
-
-      displayFirstFive(returnedBody);
-    });
-
-    console.log(individualBusStopIds);
+    //console.log(individualBusStopIds);
   });
 
   function displayFirstFive(returnedBody) {
     const firstFive = returnedBody.slice(0, 5);
-    console.log(firstFive);
+
+    // for (let i = 0; i < firstFive.length; i++)
+    //   console.log(`${firstFive[i].lineName} ${firstFive[i].expectedArrival}`);
+
+    firstFive.forEach(function (busArrival) {
+      console.log(`${busArrival.lineName} ${busArrival.expectedArrival}`);
+    });
   }
 });
