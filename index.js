@@ -13,26 +13,26 @@ let promise = new Promise(function (resolve, reject) {
     const longitudeOfPostcode = returnedPostcodeBody.result.longitude;
     const latitudeOfPostcode = returnedPostcodeBody.result.latitude;
 
-    const tflUrl =
+    const raduisUrl =
       "https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&lat=" +
       latitudeOfPostcode +
       "&lon=" +
       longitudeOfPostcode;
 
-    resolve(tflUrl);
+    resolve(raduisUrl);
   });
 });
 
 promise
-  .then(function (tflUrl) {
+  .then(function (raduisUrl) {
     return new Promise(function (resolve, reject) {
-      request(tflUrl, function (error, response, body) {
-        const returnedtflBody = JSON.parse(body);
+      request(raduisUrl, function (error, response, body) {
+        const returnedRadiusBody = JSON.parse(body);
 
-        const nearestTwoBusStops = returnedtflBody.stopPoints.slice(0, 2);
+        const nearestTwoBusStopsIds = returnedRadiusBody.stopPoints.slice(0, 2);
         const arrayUrls = [];
         for (let i = 0; i < 2; i++) {
-          let individualBusStopIds = nearestTwoBusStops[i].naptanId;
+          let individualBusStopIds = nearestTwoBusStopsIds[i].naptanId;
 
           const url =
             "https://api.tfl.gov.uk/StopPoint/" +
@@ -62,10 +62,10 @@ promise
     return Promise.all(arrayPromises);
   })
   .then(function (twoListsOfBusArrivals) {
-    displayFirstFiveArrivalsOnList(twoListsOfBusArrivals[0]);
     console.log(`The bus stop number ${200}`);
-    displayFirstFiveArrivalsOnList(twoListsOfBusArrivals[1]);
+    displayFirstFiveArrivalsOnList(twoListsOfBusArrivals[0]);
     console.log(`The bus stop number ${100}`);
+    displayFirstFiveArrivalsOnList(twoListsOfBusArrivals[1]);
   });
 
 function displayFirstFiveArrivalsOnList(listOfArrivals) {
