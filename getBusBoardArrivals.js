@@ -3,9 +3,7 @@ const request = require("request");
 function getBusBoardArrivals(res) {
   const postcode = "NW5 1TL";
 
-  getLongAndLatForPostcode(postcode);
-
-  const longAndLatPromise = promise;
+  const longAndLatPromise = getLongAndLatForPostcode(postcode);
 
   longAndLatPromise
     .then(function (raduisUrl) {
@@ -62,7 +60,7 @@ function getBusBoardArrivals(res) {
 }
 
 function getLongAndLatForPostcode(postcode) {
-  let promise = new Promise(function (resolve, reject) {
+  return new Promise(function (resolve, reject) {
     request("https://api.postcodes.io/postcodes/" + postcode, function (
       error,
       response,
@@ -81,8 +79,6 @@ function getLongAndLatForPostcode(postcode) {
 
       resolve(raduisUrl);
     });
-
   });
-  return promise;
 }
 module.exports = getBusBoardArrivals;
