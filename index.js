@@ -69,7 +69,15 @@ app.get("/departureboards", (req, res) => {
       return Promise.all(arrayPromises);
     })
     .then(function (twoListsOfBusArrivals) {
-      res.send(twoListsOfBusArrivals);
+      const seperateBusList = twoListsOfBusArrivals.slice(0, 2);
+      const firstList = seperateBusList[0].slice(0, 5);
+      const secondList = seperateBusList[1].slice(0, 5);
+      const busBoardLists = {
+        first: firstList,
+        second: secondList,
+      };
+
+      res.send(busBoardLists);
     });
 });
 
